@@ -1,0 +1,27 @@
+<idea-plugin>
+  <id>com.github.jglanz.kdocset.reader.idea</id>
+  <name>KDocset Reader</name>
+  <vendor email="jglanz@example.com" url="https://github.com/jglanz">jglanz</vendor>
+  <version>0.1.0</version>
+
+  <description>
+    <![CDATA[
+    Adds a Docsets tool window and documentation links backed by Dash/Zeal docsets.
+    ]]>
+  </description>
+
+  <depends>com.intellij.modules.platform</depends>
+  <depends>com.intellij.modules.lang</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <applicationService serviceImplementation="com.github.jglanz.kdocset.idea.settings.KDocsetSettingsState"/>
+    <applicationConfigurable
+            instance="com.github.jglanz.kdocset.idea.settings.KDocsetSettingsConfigurable"
+            displayName="DocSet Reader"/>
+    <toolWindow factoryClass="com.github.jglanz.kdocset.idea.toolwindow.KDocsetsToolWindowFactory" id="kdocset-reader"/>
+    <platform.backend.documentation.psiTargetProvider implementation="com.github.jglanz.kdocset.idea.doc.KDocsetDocumentationTargetProvider"/>
+  </extensions>
+
+  <actions>
+  </actions>
+</idea-plugin>
