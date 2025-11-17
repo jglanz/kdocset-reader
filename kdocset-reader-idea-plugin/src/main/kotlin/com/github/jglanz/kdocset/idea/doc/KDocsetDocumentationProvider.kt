@@ -10,6 +10,7 @@ import com.intellij.platform.backend.presentation.TargetPresentation
 import com.intellij.psi.PsiElement
 import com.intellij.psi.SmartPointerManager
 import com.intellij.psi.SmartPsiElementPointer
+import java.io.File
 
 /**
  * DocumentationTarget that offers a link to matching Dash/Zeal docset content for a PSI element.
@@ -40,14 +41,11 @@ class KDocsetDocumentationProvider(
         val reader = mgr.get(docset)
         val hit = reader.search(symbolText, 1).firstOrNull()
         if (hit != null) {
-          val url = hit.fileUrl
-          val html = """
-            <html><body>
-            <div>Docset: $docset</div>
-            <div><a href=\"$url\">Open in Docset: ${hit.name}</a></div>
-            </body></html>
-          """.trimIndent()
-          return DocumentationResult.documentation(html)
+          return DocumentationResult.asyncDocumentation {
+            val htmlPath = hit.fileUrl.removePrefix("file://")
+            val html = File(htmlPath).readText()
+            DocumentationResult.documentation(html)
+          }
         }
       }
       null
